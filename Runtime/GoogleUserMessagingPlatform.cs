@@ -1,4 +1,4 @@
-﻿#define IMPLEMENTING
+﻿//#define IMPLEMENTING
 
 using System;
 using System.Globalization;
@@ -169,7 +169,7 @@ namespace com.binouze
         {
             #if UNITY_EDITOR && !IMPLEMENTING
             // nothing to do on editor
-            return false;
+            return string.Empty;
             #elif UNITY_ANDROID
 
             using var cls = new AndroidJavaClass( AndroidClass );
@@ -198,6 +198,7 @@ namespace com.binouze
 
             #endif
         }
+        
         public static bool GetConsentForVendor( int vendorID )
         {
             #if UNITY_EDITOR && !IMPLEMENTING
@@ -231,6 +232,7 @@ namespace com.binouze
 
             #endif
         }
+        
         public static bool GetConsentForAdditional( int vendorID )
         {
             #if UNITY_EDITOR && !IMPLEMENTING
@@ -300,9 +302,11 @@ namespace com.binouze
 
             return _GetCanShowAds();
 
-            #endif
+            #else
 
             return false;
+            
+            #endif
         }
         
         /// <summary>
@@ -323,9 +327,11 @@ namespace com.binouze
 
             return _GetGDPRRequired();
 
-            #endif
+            #else
 
             return false;
+            
+            #endif
         }
         
         /// <summary>
@@ -346,9 +352,11 @@ namespace com.binouze
             
             return _IsFormAvailable();
             
-            #endif
+            #else
 
             return false;
+            
+            #endif
         }
 
         /// <summary>
@@ -467,9 +475,6 @@ namespace com.binouze
                 _instance = go.AddComponent<GoogleUserMessagingPlatform>();
             }
         }
-        
-        
-        
         
         private static int String2Int( string str, int defaut = 0 )
         {
