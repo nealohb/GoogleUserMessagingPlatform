@@ -11,36 +11,36 @@ using System.Runtime.InteropServices;
 
 namespace com.binouze
 {
-    #if UNITY_ANDROID
+#if UNITY_ANDROID
     public enum ConsentStatus
     {
         NOT_REQUIRED = 1,
-        OBTAINED     = 3,
-        REQUIRED     = 2,
-        UNKNOWN      = 0
+        OBTAINED = 3,
+        REQUIRED = 2,
+        UNKNOWN = 0
     }
-    #else
+#else
     public enum ConsentStatus
     {
         NOT_REQUIRED = 2,
-        OBTAINED     = 3,
-        REQUIRED     = 1,
-        UNKNOWN      = 0
+        OBTAINED = 3,
+        REQUIRED = 1,
+        UNKNOWN = 0
     }
-    #endif
+#endif
 
     public enum VendorsIds
     {
         AdColony = 458,
-        Liftoff  = 667,
-        Google   = 755
+        Liftoff = 667,
+        Google = 755
     }
-    
+
     public enum ExternalIds
     {
         UnityAds = 3234,
-        AdMost  = 2900,
-        AppLovin   = 1301,
+        AdMost = 2900,
+        AppLovin = 1301,
         Chartboost = 2898,
         Singular = 1046
     }
@@ -49,14 +49,13 @@ namespace com.binouze
     {
         private const string AndroidClass = "com.binouze.GoogleUserMessagingPlatform";
 
-        [UsedImplicitly]
-        public static ConsentStatus ConsentStatus { get; private set; } = ConsentStatus.UNKNOWN;
+        [UsedImplicitly] public static ConsentStatus ConsentStatus { get; private set; } = ConsentStatus.UNKNOWN;
 
         private static Action<ConsentStatus> OnStatusChanged;
-        private static Action                OnFormClosed;
-        private static bool                  LogEnabled;
+        private static Action OnFormClosed;
+        private static bool LogEnabled;
 
-        #if UNITY_IOS
+#if UNITY_IOS
         [DllImport( "__Internal" )]
         private static extern void _EnableDebugLogging( bool enabled );
 
@@ -90,13 +89,15 @@ namespace com.binouze
         [DllImport( "__Internal" )]
         private static extern string _GetPurposeConsent();
 
-        #endif
+#endif
 
 
-        private static void Log( string str )
+        private static void Log(string text)
         {
-            if( LogEnabled )
-                Debug.Log( $"[GoogleUserMessagingPlatform] {str}" );
+            if (LogEnabled)
+            {
+                Debug.Log($"[GoogleUserMessagingPlatform] {text}");
+            }
         }
 
         /// <summary>
@@ -104,160 +105,156 @@ namespace com.binouze
         /// </summary>
         /// <param name="enabled"></param>
         [UsedImplicitly]
-        public static void SetDebugLogging( bool enabled )
+        public static void SetDebugLogging(bool enabled)
         {
             LogEnabled = enabled;
 
-            #if UNITY_EDITOR && !IMPLEMENTING
-            // nothing to do on editor
-            #elif UNITY_ANDROID
+#if UNITY_EDITOR && !IMPLEMENTING
+            // nothing to do in editor
+#elif UNITY_ANDROID
 
-            using var cls = new AndroidJavaClass( AndroidClass );
-            cls.CallStatic( "EnableDebugLogging", enabled );
+            using var cls = new AndroidJavaClass(AndroidClass);
+            cls.CallStatic("EnableDebugLogging", enabled);
 
-            #elif UNITY_IOS
+#elif UNITY_IOS
 
-            _EnableDebugLogging( enabled );
+            _EnableDebugLogging(enabled);
 
-            #endif
+#endif
         }
 
         /// <summary>
-        /// Set debug options to be able to test form
+        /// Set debug options to be able to test the form
         /// </summary>
         /// <param name="device">the debug device to test on</param>
-        /// <param name="forceReset">true to force reset the form datas</param>
+        /// <param name="forceReset">true to force reset the form data</param>
         [UsedImplicitly]
-        public static void SetDebugMode( string device, bool forceReset )
+        public static void SetDebugMode(string device, bool forceReset)
         {
-            #if UNITY_EDITOR && !IMPLEMENTING
-            // nothing to do on editor
-            #elif UNITY_ANDROID
+#if UNITY_EDITOR && !IMPLEMENTING
+            // nothing to do in editor
+#elif UNITY_ANDROID
 
-            using var cls = new AndroidJavaClass( AndroidClass );
-            cls.CallStatic( "SetDebugMode", device, forceReset  );
+            using var cls = new AndroidJavaClass(AndroidClass);
+            cls.CallStatic("SetDebugMode", device, forceReset);
 
-            #elif UNITY_IOS
+#elif UNITY_IOS
 
-            _SetDebugMode( device, forceReset );
+            _SetDebugMode(device, forceReset);
 
-            #endif
+#endif
         }
-
-        /// <summary>
-        /// set it to true to enable plugin logs
-        /// </summary>
-        /// <param name="targetChildren"></param>
+        
         [UsedImplicitly]
-        public static void SetTargetChildren( bool targetChildren )
+        public static void SetTargetChildren(bool targetChildren)
         {
-            #if UNITY_EDITOR && !IMPLEMENTING
-            // nothing to do on editor
-            #elif UNITY_ANDROID
+#if UNITY_EDITOR && !IMPLEMENTING
+            // nothing to do in editor
+#elif UNITY_ANDROID
 
-            using var cls = new AndroidJavaClass( AndroidClass );
-            cls.CallStatic( "SetTargetChildren", targetChildren );
+            using var cls = new AndroidJavaClass(AndroidClass);
+            cls.CallStatic("SetTargetChildren", targetChildren);
 
-            #elif UNITY_IOS
+#elif UNITY_IOS
 
             _SetTargetChildren( targetChildren );
 
-            #endif
+#endif
         }
 
         public static string GetPurposeConsent()
         {
-            #if UNITY_EDITOR && !IMPLEMENTING
-            // nothing to do on editor
+#if UNITY_EDITOR && !IMPLEMENTING
+            // nothing to do in editor
             return string.Empty;
-            #elif UNITY_ANDROID
+#elif UNITY_ANDROID
 
-            using var cls = new AndroidJavaClass( AndroidClass );
-            return cls.CallStatic<string>( "GetPurposeConsent" );
+            using var cls = new AndroidJavaClass(AndroidClass);
+            return cls.CallStatic<string>("GetPurposeConsent");
 
-            #elif UNITY_IOS
+#elif UNITY_IOS
 
             return _GetPurposeConsent();
 
-            #endif
+#endif
         }
 
-        public static bool GetConsentForVendor( VendorsIds vendorID )
+        public static bool GetConsentForVendor(VendorsIds vendorID)
         {
-            #if UNITY_EDITOR && !IMPLEMENTING
-            // nothing to do on editor
+#if UNITY_EDITOR && !IMPLEMENTING
+            // nothing to do in editor
             return false;
-            #elif UNITY_ANDROID
+#elif UNITY_ANDROID
 
-            using var cls = new AndroidJavaClass( AndroidClass );
-            return cls.CallStatic<bool>( "GetConsentForVendor", (int)vendorID );
+            using var cls = new AndroidJavaClass(AndroidClass);
+            return cls.CallStatic<bool>("GetConsentForVendor", (int)vendorID);
 
-            #elif UNITY_IOS
+#elif UNITY_IOS
 
-            return _GetConsentForVendor( (int)vendorID );
+            return _GetConsentForVendor((int)vendorID);
 
-            #endif
+#endif
         }
-        
-        public static bool GetConsentForVendor( int vendorID )
+
+        public static bool GetConsentForVendor(int vendorID)
         {
-            #if UNITY_EDITOR && !IMPLEMENTING
-            // nothing to do on editor
+#if UNITY_EDITOR && !IMPLEMENTING
+            // nothing to do in editor
             return false;
-            #elif UNITY_ANDROID
+#elif UNITY_ANDROID
 
-            using var cls = new AndroidJavaClass( AndroidClass );
-            return cls.CallStatic<bool>( "GetConsentForVendor", vendorID );
+            using var cls = new AndroidJavaClass(AndroidClass);
+            return cls.CallStatic<bool>("GetConsentForVendor", vendorID);
 
-            #elif UNITY_IOS
+#elif UNITY_IOS
 
-            return _GetConsentForVendor( vendorID );
+            return _GetConsentForVendor(vendorID);
 
-            #endif
+#endif
         }
-        
-        public static bool GetConsentForAdditional( ExternalIds vendorID )
+
+        public static bool GetConsentForAdditional(ExternalIds vendorID)
         {
-            #if UNITY_EDITOR && !IMPLEMENTING
-            // nothing to do on editor
+#if UNITY_EDITOR && !IMPLEMENTING
+            // nothing to do in editor
             return false;
-            #elif UNITY_ANDROID
+#elif UNITY_ANDROID
 
-            using var cls = new AndroidJavaClass( AndroidClass );
-            return cls.CallStatic<bool>( "GetConsentForAdditional", (int)vendorID );
+            using var cls = new AndroidJavaClass(AndroidClass);
+            return cls.CallStatic<bool>("GetConsentForAdditional", (int)vendorID);
 
-            #elif UNITY_IOS
+#elif UNITY_IOS
 
-            return _GetConsentForExternal( (int)vendorID );
+            return _GetConsentForExternal((int)vendorID);
 
-            #endif
+#endif
         }
-        
-        public static bool GetConsentForAdditional( int vendorID )
+
+        public static bool GetConsentForAdditional(int vendorID)
         {
-            #if UNITY_EDITOR && !IMPLEMENTING
-            // nothing to do on editor
+#if UNITY_EDITOR && !IMPLEMENTING
+            // nothing to do in editor
             return false;
-            #elif UNITY_ANDROID
+#elif UNITY_ANDROID
 
-            using var cls = new AndroidJavaClass( AndroidClass );
-            return cls.CallStatic<bool>( "GetConsentForAdditional", vendorID );
+            using var cls = new AndroidJavaClass(AndroidClass);
+            return cls.CallStatic<bool>("GetConsentForAdditional", vendorID);
 
-            #elif UNITY_IOS
+#elif UNITY_IOS
 
-            return _GetConsentForExternal( vendorID );
+            return _GetConsentForExternal(vendorID);
 
-            #endif
+#endif
         }
-        
+
         /// <summary>
-        /// Set a callback to listen for consent status change
+        /// Set a callback to listen to a consent status change
         /// </summary>
-        /// <param name="Listener"></param>
+        /// <param name="listener"></param>
         [UsedImplicitly]
-        public static void SetOnStatusChangedListener( Action<ConsentStatus> Listener )
+        public static void SetOnStatusChangedListener(Action<ConsentStatus> listener)
         {
-            OnStatusChanged = Listener;
+            OnStatusChanged = listener;
         }
 
         /// <summary>
@@ -266,22 +263,22 @@ namespace com.binouze
         [UsedImplicitly]
         public static void Initialize()
         {
-            Log( "Initialize" );
-            
+            Log("Initialize");
+
             SetInstance();
-            
-            #if UNITY_EDITOR && !IMPLEMENTING
-            // nothing to do on editor
-            #elif UNITY_ANDROID
-            
-            using var cls = new AndroidJavaClass( AndroidClass );
-            cls.CallStatic( "Initialize" );
-            
-            #elif UNITY_IOS
-            
+
+#if UNITY_EDITOR && !IMPLEMENTING
+            // nothing to do in editor
+#elif UNITY_ANDROID
+
+            using var cls = new AndroidJavaClass(AndroidClass);
+            cls.CallStatic("Initialize");
+
+#elif UNITY_IOS
+
             _Initialize();
-            
-            #endif
+
+#endif
         }
 
         /// <summary>
@@ -290,66 +287,66 @@ namespace com.binouze
         [UsedImplicitly]
         public static bool CanShowAds()
         {
-            #if UNITY_EDITOR && !IMPLEMENTING
-            // nothing to do on editor
+#if UNITY_EDITOR && !IMPLEMENTING
+            // nothing to do in editor
             return false;
-            #elif UNITY_ANDROID
+#elif UNITY_ANDROID
 
-            using var cls = new AndroidJavaClass( AndroidClass );
-            return cls.CallStatic<bool>( "GetCanShowAds" );
+            using var cls = new AndroidJavaClass(AndroidClass);
+            return cls.CallStatic<bool>("GetCanShowAds");
 
-            #elif UNITY_IOS
+#elif UNITY_IOS
 
             return _GetCanShowAds();
 
-            #else
+#else
 
             return false;
-            
-            #endif
+
+#endif
         }
-        
+
         /// <summary>
         /// true if user accepted GDPR consent usage necessary to see ads
         /// </summary>
         [UsedImplicitly]
         public static bool IsGDPRRequired()
         {
-            #if UNITY_EDITOR && !IMPLEMENTING
-            // nothing to do on editor
+#if UNITY_EDITOR && !IMPLEMENTING
+            // nothing to do in editor
             return false;
-            #elif UNITY_ANDROID
+#elif UNITY_ANDROID
 
-            using var cls = new AndroidJavaClass( AndroidClass );
-            return cls.CallStatic<bool>( "GetGDPRRequired" );
+            using var cls = new AndroidJavaClass(AndroidClass);
+            return cls.CallStatic<bool>("GetGDPRRequired");
 
-            #elif UNITY_IOS
+#elif UNITY_IOS
 
             return _GetGDPRRequired();
 
-            #else
+#else
 
             return false;
-            
-            #endif
+
+#endif
         }
-        
+
         /// <summary>
-        /// returns true if a form is available
+        /// returns true if the form is available
         /// </summary>
         /// <returns></returns>
         [UsedImplicitly]
         public static bool IsFormAvailable()
         {
 #if UNITY_EDITOR && !IMPLEMENTING
-            
+
             // nothing to do in editor
             return false;
-            
+
 #elif UNITY_ANDROID
 
-            using var cls = new AndroidJavaClass( AndroidClass );
-            return cls.CallStatic<bool>( "IsFormAvailable" );
+            using var cls = new AndroidJavaClass(AndroidClass);
+            return cls.CallStatic<bool>("IsFormAvailable");
 
 #elif UNITY_IOS
 
@@ -364,89 +361,97 @@ namespace com.binouze
 
         /// <summary>
         /// Show the form if the form is available
-        /// Optionally call a callback when the user close the form (or if the form is not oppenned)
+        /// Optionally call a callback when the user close the form (or if the form is not opened)
         /// </summary>
         [UsedImplicitly]
         public static void ShowForm()
         {
-            ShowForm( null );
+            ShowForm(null);
         }
+
         /// <summary>
         /// Show the form if the form is available
-        /// Optionally call a callback when the user close the form (or if the form is not oppenned)
+        /// Optionally call a callback when the user close the form (or if the form is not opened)
         /// </summary>
         /// <param name="onComplete"></param>
         [UsedImplicitly]
-        public static void ShowForm( Action onComplete )
+        public static void ShowForm(Action onComplete)
         {
-            Log( "ShowForm" );
-            
+            Log("ShowForm");
+
             OnFormClosed = onComplete;
-            
-            #if UNITY_EDITOR && !IMPLEMENTING
-            // nothing to do on editor
-            #elif UNITY_ANDROID
-            
-            using var cls = new AndroidJavaClass( AndroidClass );
-            cls.CallStatic( "LoadForm", true, false );
-            
-            #elif UNITY_IOS
-            
-            _LoadForm( true, false );
-            
-            #endif
+
+#if UNITY_EDITOR && !IMPLEMENTING
+            // nothing to do in editor
+#elif UNITY_ANDROID
+
+            using var cls = new AndroidJavaClass(AndroidClass);
+            cls.CallStatic("LoadForm", true, false);
+
+#elif UNITY_IOS
+
+            _LoadForm(true, false);
+
+#endif
         }
-        
+
         /// <summary>
-        /// return true if the form must be shown for the user
+        /// returns true if the form must be shown for the user
         /// </summary>
         /// <returns></returns>
         [UsedImplicitly]
         public static bool IsFormRequired()
         {
-            Log( $"IsFormRequired {ConsentStatus}" );
+            Log($"IsFormRequired {ConsentStatus}");
             return ConsentStatus == ConsentStatus.REQUIRED;
         }
 
         /// <summary>
         /// Show the form if the form is available and the status is ConsentStatus.REQUIRED
-        /// Optionally call a callback when the user close the form (or if the form is not oppenned)
+        /// Optionally call a callback when the user close the form (or if the form is not opened)
         /// </summary>
         [UsedImplicitly]
         public static void ShowFormIfRequired()
         {
-            ShowFormIfRequired( null );
+            ShowFormIfRequired(null);
         }
+
         /// <summary>
         /// Show the form if the form is available and the status is ConsentStatus.REQUIRED
         /// call a callback with true as result if the form has been shown, false if form not shown
         /// </summary>
         /// <param name="onComplete"></param>
         [UsedImplicitly]
-        public static void ShowFormIfRequired( Action<bool> onComplete )
+        public static void ShowFormIfRequired(Action<bool> onComplete)
         {
-            Log( $"ShowFormIfRequired<bool> {ConsentStatus}" );
+            Log($"ShowFormIfRequired<bool> {ConsentStatus}");
 
-            if( ConsentStatus == ConsentStatus.REQUIRED )
-                ShowForm( () => onComplete?.Invoke( true ) );
+            if (ConsentStatus == ConsentStatus.REQUIRED)
+            {
+                ShowForm(() => onComplete?.Invoke(true));
+            }
             else
+            {
                 onComplete?.Invoke(false);
+            }
         }
 
         /// <summary>
-        /// he we receive native plugin messages
+        /// here we receive native plugin messages
         /// </summary>
         /// <param name="statusString"></param>
         [UsedImplicitly]
-        public void OnFormDissmissedMessage( string statusString )
+        public void OnFormDismissedMessage(string statusString)
         {
-            Log( $"OnFormDissmissedMessage {statusString}" );
-            
-            var statusint = String2Int( statusString );
-            ConsentStatus = Enum.IsDefined( typeof(ConsentStatus), statusint ) ? (ConsentStatus)statusint : ConsentStatus.UNKNOWN;
+            Log($"OnFormDismissedMessage {statusString}");
 
-            OnStatusChanged?.Invoke( ConsentStatus );
-            
+            var statusInt = String2Int(statusString);
+            ConsentStatus = Enum.IsDefined(typeof(ConsentStatus), statusInt)
+                ? (ConsentStatus)statusInt
+                : ConsentStatus.UNKNOWN;
+
+            OnStatusChanged?.Invoke(ConsentStatus);
+
             OnFormClosed?.Invoke();
             OnFormClosed = null;
         }
@@ -455,39 +460,42 @@ namespace com.binouze
         /// just keep a reference - not used
         /// </summary>
         private static GoogleUserMessagingPlatform _instance;
+
         /// <summary>
         /// Create the unity asset to be able to receive messages from native plugin
         /// </summary>
         private static void SetInstance()
         {
-            if( _instance != null )
+            if (_instance != null)
+            {
                 return;
-            
-            _instance = (GoogleUserMessagingPlatform)FindObjectOfType( typeof(GoogleUserMessagingPlatform) );
-            if( _instance == null ) 
+            }
+
+            _instance = (GoogleUserMessagingPlatform)FindObjectOfType(typeof(GoogleUserMessagingPlatform));
+            if (_instance == null)
             {
                 const string goName = "GoogleUserMessagingPlatform";
 
-                var go = GameObject.Find( goName );
-                if( go == null ) 
+                var go = GameObject.Find(goName);
+                if (go == null)
                 {
-                    go = new GameObject {name = goName};
-                    DontDestroyOnLoad( go );
+                    go = new GameObject { name = goName };
+                    DontDestroyOnLoad(go);
                 }
-                
+
                 _instance = go.AddComponent<GoogleUserMessagingPlatform>();
             }
         }
-        
-        private static int String2Int( string str, int defaut = 0 )
+
+        private static int String2Int(string str, int defaultValue = 0)
         {
             try
             {
-                return Convert.ToInt32( Convert.ToDecimal( str, CultureInfo.InvariantCulture ), CultureInfo.InvariantCulture );
+                return Convert.ToInt32(Convert.ToDecimal(str, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
             }
-            catch( Exception )
+            catch (Exception)
             {
-                return defaut;
+                return defaultValue;
             }
         }
     }

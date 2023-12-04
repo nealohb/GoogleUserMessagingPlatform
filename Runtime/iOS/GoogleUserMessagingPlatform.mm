@@ -51,7 +51,7 @@ extern "C"
         
         NSLog(@"[GoogleUserMessagingPlatform]: DispatchStatus %@", NSStatus);
         
-        UnitySendMessage( "GoogleUserMessagingPlatform", "OnFormDissmissedMessage", strStatus );
+        UnitySendMessage( "GoogleUserMessagingPlatform", "OnFormDismissedMessage", strStatus );
     }
     
     // -- EXPOSED TO UNITY -- //
@@ -211,7 +211,7 @@ extern "C"
             
             if( ForceReset )
             {
-                LogError(@"RESETING DATAS");
+                LogError(@"RESETTING DATA");
                 [UMPConsentInformation.sharedInstance reset];
             }
         }
@@ -233,12 +233,12 @@ extern "C"
                     // available.
                     if( UMPConsentInformation.sharedInstance.formStatus == UMPFormStatusAvailable ) 
                     {
-                        Log(@"onConsentInfoUpdateSuccess FROM AVAILABLE");
+                        Log(@"onConsentInfoUpdateSuccess FORM AVAILABLE");
                         IsFormAvailable = true;
                     }
                     else
                     {
-                        Log(@"onConsentInfoUpdateSuccess FROM NOT AVAILABLE");
+                        Log(@"onConsentInfoUpdateSuccess FORM NOT AVAILABLE");
                     }
                     
                     _LoadForm( false, true );
