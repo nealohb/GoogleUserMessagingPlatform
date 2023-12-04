@@ -28,6 +28,12 @@ import Foundation
     {
         let settings = UserDefaults.standard
         let gdpr     = settings.integer(forKey: "IABTCF_gdprApplies")
+
+        if (gdpr == nil)
+        {
+            return false
+        }
+
         return gdpr == 1
     }
 
