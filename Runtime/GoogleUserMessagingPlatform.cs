@@ -341,22 +341,25 @@ namespace com.binouze
         [UsedImplicitly]
         public static bool IsFormAvailable()
         {
-            #if UNITY_EDITOR && !IMPLEMENTING
-            // nothing to do on editor
-            #elif UNITY_ANDROID
+#if UNITY_EDITOR && !IMPLEMENTING
             
-            using var cls = new AndroidJavaClass( AndroidClass );
-            return cls.CallStatic<bool>( "IsFormAvailable" );
-            
-            #elif UNITY_IOS
-            
-            return _IsFormAvailable();
-            
-            #else
-
+            // nothing to do in editor
             return false;
             
-            #endif
+#elif UNITY_ANDROID
+
+            using var cls = new AndroidJavaClass( AndroidClass );
+            return cls.CallStatic<bool>( "IsFormAvailable" );
+
+#elif UNITY_IOS
+
+            return _IsFormAvailable();
+
+#else
+
+            return false;
+
+#endif
         }
 
         /// <summary>
