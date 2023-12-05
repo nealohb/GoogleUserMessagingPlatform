@@ -12,9 +12,6 @@ _Note that on iOS the plugin do not manage the App Tracking Transparency Consent
 
 Choose your favourite method:
 
-- **Plain install**
-    - Clone or [download](https://github.com/binouze/GoogleUserMessagingPlatform/archive/refs/heads/master.zip) 
-this repository and put it in the `Assets/Plugins` folder of your project.
 - **Unity Package Manager (Manual)**:
     - Add the following line to *Packages/manifest.json*:
     - `"com.binouze.googleusermessagingplatform": "https://github.com/binouze/GoogleUserMessagingPlatform.git"`
