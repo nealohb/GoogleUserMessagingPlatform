@@ -59,8 +59,16 @@ extern "C"
     char* _GetPurposeConsent()
     {
         NSString* NSPurpose = [[GDPRHelper shared] getPurposeConsents];
-        char* strPurpose    = (char*) [NSPurpose UTF8String];
-        return strPurpose;
+
+        if (NSPurpose == NULL)
+            return NULL;
+
+        const char* strPurpose = [NSPurpose UTF8String];
+        //create a null terminated C string on the heap so that our string's memory isn't wiped out right after method's return
+        char* cString = (char*)malloc(strlen(strPurpose) + 1);
+        strcpy(cString, strPurpose);
+
+        return cString;
     } 
     
     bool _GetCanShowAds()
