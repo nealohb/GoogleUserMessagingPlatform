@@ -130,7 +130,7 @@ public class GoogleUserMessagingPlatform
         
         if( DebugMode && ForceReset )
         {
-            logInfo("Force Reset Datas");
+            logInfo("Force Reset Data");
             consentInformation.reset();
         }
         
