@@ -19,7 +19,7 @@ public class GoogleUserMessagingPlatform
     private static void SendStatusMessage(String status)
     {
         logInfo("SendStatusMessage "+status);
-        UnityPlayer.UnitySendMessage("GoogleUserMessagingPlatform", "OnFormDissmissedMessage", status );
+        UnityPlayer.UnitySendMessage("GoogleUserMessagingPlatform", "OnFormDismissedMessage", status );
     }
     
     /**
