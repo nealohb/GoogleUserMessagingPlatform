@@ -276,7 +276,7 @@ public class GoogleUserMessagingPlatform
     {
         if( !FormAvailable )
         {
-            if( forceShow )
+            if( sendStatusToUnity )
                 SendStatusMessage( "0" );
                 
             logError("LoadForm FORM NOT AVAILABLE");
@@ -320,7 +320,7 @@ public class GoogleUserMessagingPlatform
                 @Override
                 public void onConsentFormLoadFailure(FormError formError) 
                 {
-                    if( forceShow )
+                    if( sendStatusToUnity )
                         SendStatusMessage( "0" );
                     
                     // Handle the error.
