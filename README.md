@@ -14,11 +14,11 @@ Choose your favourite method:
 
 - **Unity Package Manager (Manual)**:
     - Add the following line to *Packages/manifest.json*:
-    - `"com.binouze.googleusermessagingplatform": "https://github.com/Wnntyl/GoogleUserMessagingPlatform.git"`
+    - `"com.binouze.googleusermessagingplatform": "https://github.com/nealohb/GoogleUserMessagingPlatform.git"`
 - **Unity Package Manager (Auto)**
     - in the package manager, click on the + 
     - select `add package from GIT url`
-    - paste the following url: `"https://github.com/Wnntyl/GoogleUserMessagingPlatform.git"`
+    - paste the following url: `"https://github.com/nealohb/GoogleUserMessagingPlatform.git"`
 
 
 ## How to use
