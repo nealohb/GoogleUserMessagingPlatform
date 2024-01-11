@@ -232,6 +232,7 @@ extern "C"
                 if( error ) 
                 {
                     // Handle the error.
+                    dispatchStatus( 0 );
                     LogError( [NSString stringWithFormat:@"%@ / %@", @"onConsentInfoUpdateFailure ERROR ", error.description] );
                 } 
                 else 
